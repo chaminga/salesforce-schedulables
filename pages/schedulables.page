@@ -15,19 +15,31 @@
     } );
 </script>
 <apex:pageMessages escape="false" id="pgmessage"/>
+<div style="clear: both;"></div>
+<apex:commandButton style="float: right;" onclick="if(!confirm('Are you sure?')){return};" styleClass="button-red1" value="Schedule All" action="{!scheduleAll}" status="check" reRender="mainForm"></apex:commandButton>
+<div style="clear: both;"></div>
 <table class="dataTable table table-striped table-bordered" cellspacing="0" width="100%">
     <thead>
         <tr>
             <th>Class</th>
-            <th>Execute</th>
+            <th>Status</th>
+            <th style="width: 150px; max-width: 200px">Action</th>
         </tr>
     </thead>
     <tbody>
         <apex:repeat value="{!SchedulableClasses}" var="sc">
         <tr>
             <td>{!sc.Name}</td>
-            <td><apex:commandButton styleClass="button-blue1" value="Execute" action="{!executeMethod}" status="check" reRender="mainForm"><apex:param name="clsName" value="{!sc.Name}" /></apex:commandButton></td>
-        </tr>    
+            <td>{!sc.Status}</td>
+            <td>
+                <apex:commandButton styleClass="button-blue1" value="Execute" action="{!executeMethod}" status="check" reRender="mainForm">
+                    <apex:param name="clsName" value="{!sc.Name}" />
+                </apex:commandButton>
+                <apex:commandButton styleClass="button-green1" value="Schedule" action="{!scheduleMethod}" status="check" reRender="mainForm" title="Schedule 1 A.M. everyday">
+                    <apex:param name="clsName" value="{!sc.Name}" />
+                </apex:commandButton>
+            </td>
+        </tr>
         </apex:repeat>
     </tbody>
 </table>
@@ -40,4 +52,4 @@
                                 messageStyle="color:darkred;font-size:11pt;font-weight:bold;" />
     </apex:facet>
 </apex:actionStatus>
-</apex:page>          
+</apex:page>
