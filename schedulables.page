@@ -1,0 +1,43 @@
+<apex:page controller="SchedulablesController">
+
+<apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js" />
+<apex:includeScript value="https://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js" />
+<apex:includeScript value="https://cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.js" />
+<apex:stylesheet value="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />
+<apex:stylesheet value="https://cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.css" />
+<apex:stylesheet value="{!$Resource.custom_bootstrap}"/>
+<apex:form id="mainForm">
+<script type="text/javascript" language="javascript" class="init">
+    $j = jQuery.noConflict();
+
+    $j(document).ready(function() {
+        $j('.dataTable').dataTable();
+    } );
+</script>
+<apex:pageMessages escape="false" id="pgmessage"/>
+<table class="dataTable table table-striped table-bordered" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>Class</th>
+            <th>Execute</th>
+        </tr>
+    </thead>
+    <tbody>
+        <apex:repeat value="{!SchedulableClasses}" var="sc">
+        <tr>
+            <td>{!sc.Name}</td>
+            <td><apex:commandButton styleClass="button-blue1" value="Execute" action="{!executeMethod}" status="check" reRender="mainForm"><apex:param name="clsName" value="{!sc.Name}" /></apex:commandButton></td>
+        </tr>    
+        </apex:repeat>
+    </tbody>
+</table>
+</apex:form>
+<apex:actionStatus id="check">
+    <apex:facet name="start">
+        <c:enhancedActionStatus BackColor="#fff" borderColor="#336699"
+                                borderSize="1" height="50px" width="120px"
+                                ImageUrl="{!$Resource.LoadingAnimation}" Message="Loading..."
+                                messageStyle="color:darkred;font-size:11pt;font-weight:bold;" />
+    </apex:facet>
+</apex:actionStatus>
+</apex:page>          
