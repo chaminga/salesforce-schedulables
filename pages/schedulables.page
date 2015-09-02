@@ -1,4 +1,4 @@
-<apex:page controller="SchedulablesController">
+<apex:page controller="SchedulablesController" sidebar="false">
 
 <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js" />
 <apex:includeScript value="https://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js" />
@@ -22,7 +22,6 @@
     <thead>
         <tr>
             <th>Class</th>
-            <th>Status</th>
             <th style="width: 150px; max-width: 200px">Action</th>
         </tr>
     </thead>
@@ -30,7 +29,6 @@
         <apex:repeat value="{!SchedulableClasses}" var="sc">
         <tr>
             <td>{!sc.Name}</td>
-            <td>{!sc.Status}</td>
             <td>
                 <apex:commandButton styleClass="button-blue1" value="Execute" action="{!executeMethod}" status="check" reRender="mainForm">
                     <apex:param name="clsName" value="{!sc.Name}" />
