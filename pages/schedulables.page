@@ -13,10 +13,22 @@
     $j(document).ready(function() {
         $j('.dataTable').dataTable();
     } );
+    
+    function getScheduleTime(className){
+        var time = prompt("Please enter schedule hour [0-23]", "23");
+        
+         if (time != null) {
+             setScheduleTime(className, time);
+        }
+    }
 </script>
 <apex:pageMessages escape="false" id="pgmessage"/>
+<apex:actionFunction name="setScheduleTime" action="{!scheduleMethod}" status="check" reRender="mainForm">
+    <apex:param name="clsName" value="" assignTo="{!SelectedClass}" />
+    <apex:param name="timeVal" value="" assignTo="{!SelectedTime}" />
+</apex:actionFunction>
 <div style="clear: both;"></div>
-<apex:commandButton style="float: right;" onclick="if(!confirm('Are you sure?')){return};" styleClass="button-red1" value="Schedule All" action="{!scheduleAll}" status="check" reRender="mainForm"></apex:commandButton>
+<apex:commandButton style="float: right;" title="Schedule all class at 1 a.m everyday" onclick="if(!confirm('Are you sure?')){return};" styleClass="button-red1" value="Schedule All" action="{!scheduleAll}" status="check" reRender="mainForm"></apex:commandButton>
 <div style="clear: both;"></div>
 <table class="dataTable table table-striped table-bordered" cellspacing="0" width="100%">
     <thead>
@@ -33,9 +45,7 @@
                 <apex:commandButton styleClass="button-blue1" value="Execute" action="{!executeMethod}" status="check" reRender="mainForm">
                     <apex:param name="clsName" value="{!sc.Name}" />
                 </apex:commandButton>
-                <apex:commandButton styleClass="button-green1" value="Schedule" action="{!scheduleMethod}" status="check" reRender="mainForm" title="Schedule 1 A.M. everyday">
-                    <apex:param name="clsName" value="{!sc.Name}" />
-                </apex:commandButton>
+                <apex:commandButton styleClass="button-green1" value="Schedule" title="Schedule Class" onclick="getScheduleTime('{!sc.Name}'); return false;" />
             </td>
         </tr>
         </apex:repeat>

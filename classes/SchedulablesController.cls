@@ -2,6 +2,8 @@
 public class SchedulablesController {
 
     public List<ApexClass> SchedulableClasses {get; set;}
+    public String SelectedClass {get; set;}
+    public String SelectedTime {get; set;}
 
     public SchedulablesController(){
         SchedulableClasses = new List<ApexClass>();
@@ -10,7 +12,7 @@ public class SchedulablesController {
                                 FROM ApexClass
                                 ORDER BY Name
                                 LIMIT 5000]) {
-            if(cls.Body.contains('implements Schedulable')) {
+            if(cls.Body.containsIgnoreCase('implements Schedulable')) {
                 SchedulableClasses.add(cls);
             }
         }
@@ -27,9 +29,9 @@ public class SchedulablesController {
              ToolingAPI.ExecuteAnonymousResult toolingResult = tAPI.executeAnonymousUnencoded(codeToExec);
 
              if (toolingResult.success){
-             	Apexpages.addMessage(new ApexPages.Message(ApexPages.Severity.CONFIRM, String.valueOf(toolingResult)) );
+                Apexpages.addMessage(new ApexPages.Message(ApexPages.Severity.CONFIRM, String.valueOf(toolingResult)) );
              }else{
-             	Apexpages.addMessage(new ApexPages.Message(ApexPages.Severity.FATAL, String.valueOf(toolingResult)) );
+                Apexpages.addMessage(new ApexPages.Message(ApexPages.Severity.FATAL, String.valueOf(toolingResult)) );
              }
 
         }catch (Exception e) {
@@ -38,18 +40,19 @@ public class SchedulablesController {
     }
 
     public void scheduleMethod(){
-    	try{
-             String clsName = Apexpages.currentpage().getparameters().get('clsName');
+        try{
+             //String clsName = Apexpages.currentpage().getparameters().get('clsName');
+             String clsName = SelectedClass;
 
-             String codeToExec = 'System.schedule(\''+clsName+'\', \'0 0 1 ? * SUN-SAT\', new '+clsName+'());';
+             String codeToExec = 'System.schedule(\''+clsName+'\', \'0 0 '+SelectedTime+' ? * SUN-SAT\', new '+clsName+'());';
 
              ToolingAPI tAPI = new ToolingAPI();
              ToolingAPI.ExecuteAnonymousResult toolingResult = tAPI.executeAnonymousUnencoded(codeToExec);
 
              if (toolingResult.success){
-             	Apexpages.addMessage(new ApexPages.Message(ApexPages.Severity.CONFIRM, String.valueOf(toolingResult)) );
+                Apexpages.addMessage(new ApexPages.Message(ApexPages.Severity.CONFIRM, String.valueOf(toolingResult)) );
              }else{
-             	Apexpages.addMessage(new ApexPages.Message(ApexPages.Severity.FATAL, String.valueOf(toolingResult)) );
+                Apexpages.addMessage(new ApexPages.Message(ApexPages.Severity.FATAL, String.valueOf(toolingResult)) );
              }
 
         }catch (Exception e) {
@@ -58,19 +61,19 @@ public class SchedulablesController {
     }
 
     public void scheduleAll(){
-    	try{
-			 String codeToExec = '';
-			 for(ApexClass cls : SchedulableClasses){
-			 	 codeToExec += 'System.schedule(\''+cls.Name+'\', \'0 0 1 ? * SUN-SAT\', new '+cls.Name+'());';
-			 }
+        try{
+             String codeToExec = '';
+             for(ApexClass cls : SchedulableClasses){
+                 codeToExec += 'System.schedule(\''+cls.Name+'\', \'0 0 1 ? * SUN-SAT\', new '+cls.Name+'());';
+             }
 
              ToolingAPI tAPI = new ToolingAPI();
              ToolingAPI.ExecuteAnonymousResult toolingResult = tAPI.executeAnonymousUnencoded(codeToExec);
 
              if (toolingResult.success){
-             	Apexpages.addMessage(new ApexPages.Message(ApexPages.Severity.CONFIRM, String.valueOf(toolingResult)) );
+                Apexpages.addMessage(new ApexPages.Message(ApexPages.Severity.CONFIRM, String.valueOf(toolingResult)) );
              }else{
-             	Apexpages.addMessage(new ApexPages.Message(ApexPages.Severity.FATAL, String.valueOf(toolingResult)) );
+                Apexpages.addMessage(new ApexPages.Message(ApexPages.Severity.FATAL, String.valueOf(toolingResult)) );
              }
 
         }catch (Exception e) {
